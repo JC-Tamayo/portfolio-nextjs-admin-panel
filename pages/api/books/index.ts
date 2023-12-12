@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { accessToken } = await getAccessToken(req, res);
 
   try {
-    const { page, pageSize, ...filters } = req.body;
+    const { author, page, pageSize,publisher, publishingDateStart, publishingDateEnd, title  } = req.body;
     const bookList = await axios.get<BookList>(`${process.env.API_URL}/book`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -20,7 +20,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       params: {
         page: page+1,
         limit: pageSize,
-        ...filters,
+        author: author || undefined,
+        publisher: publisher || undefined,
+        publishingDateStart: publishingDateStart || undefined,
+        publishingDateEnd: publishingDateEnd || undefined,
+        title: title || undefined,
       }
     });
     res.status(200).json(bookList.data);
