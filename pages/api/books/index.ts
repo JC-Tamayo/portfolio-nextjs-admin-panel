@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { getAccessToken } from '@auth0/nextjs-auth0';
 
 import { BookList } from "../../../interfaces/Book";
 
