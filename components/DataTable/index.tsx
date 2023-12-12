@@ -27,6 +27,9 @@ const DataTable = (props: DataTableProps) => {
         rows={ rows }
         disableColumnMenu
         sx={{
+          '& .MuiDataGrid-columnHeaders': {
+            boxSizing: 'unset',
+          },
           '& .MuiDataGrid-columnHeader': {
            backgroundColor: "#36304a",
            color: "white",
@@ -34,6 +37,9 @@ const DataTable = (props: DataTableProps) => {
           },
           '& .MuiDataGrid-sortIcon': {
             color: '#fff',
+          },
+          '& .MuiDataGrid-iconSeparator': {
+            display: 'none',
           },
         }}
         onPaginationModelChange={ handlePaginationModel }
