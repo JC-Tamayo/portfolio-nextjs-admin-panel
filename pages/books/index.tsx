@@ -1,9 +1,11 @@
 import axios from 'axios';
+import { DateTime } from 'luxon';
 import { useCallback, useEffect, useState } from 'react';
 
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import Box from '@mui/material/Box';
 import Button  from '@mui/material/Button';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Grid from '@mui/material/Grid';
 import { GridColDef } from '@mui/x-data-grid';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -21,15 +23,21 @@ const columns: GridColDef[] = [
   { field: 'title', headerName: 'Title', flex: 1 },
   { field: 'author', headerName: 'Author', flex: 1 },
   { field: 'publisher', headerName: 'Publisher', flex: 1 },
-  { field: 'publishDate', headerName: 'Publication Date', flex: 1 },
-  { field: 'createdAt', headerName: 'Created At', flex: 1 },
+  { field: 'publishingDate', headerName: 'Publishing Date', flex: 1 },
+  { 
+    field: 'createdAt', 
+    headerName: 'Created At', 
+    flex: 1,
+    valueFormatter: (params) => params.value ? DateTime.fromISO(params.value).toFormat('yyyy-MM-dd HH:mm:ss') : ''
+  },
 ];
 
 const filterInitalState = {
   title: '',
   author: '',
   publisher: '',
-  publishDate: '',
+  publishingDateStart: null,
+  publishingDateEnd: null,
 }
 
 const BookList = () => {
@@ -45,6 +53,7 @@ const BookList = () => {
 
   const findBooks = useCallback(async () => {
     setLoading(true);
+
     const response = await axios.post<BookList>('/api/books', {
       ...paginationModel,
       ...filters,
@@ -104,12 +113,25 @@ const BookList = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <LocalizationProvider dateAdapter={AdapterLuxon}>
-              <TextField 
+              <DatePicker
+                format="yyyy-MM-dd"
+                label="Publishing Date Start"
+                onChange={ (value) => setInputs({ ...inputs, publishingDateStart: value }) }
+                slotProps={{ textField: { size: 'small' } }}
                 sx={{ width: '100%' }}
-                variant="outlined"
-                type="date"
-                value={ inputs.publishDate}
-                size="small"
+                value={ inputs.publishingDateStart }
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <LocalizationProvider dateAdapter={AdapterLuxon}>
+              <DatePicker 
+                format="yyyy-MM-dd"
+                label="Publishing Date End"
+                onChange={ (value) => setInputs({ ...inputs, publishingDateEnd: value }) }
+                slotProps={{ textField: { size: 'small' } }}
+                sx={{ width: '100%' }}
+                value={ inputs.publishingDateEnd }
               />
             </LocalizationProvider>
           </Grid>

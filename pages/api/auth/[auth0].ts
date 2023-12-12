@@ -4,7 +4,6 @@ export default handleAuth({
   login: handleLogin({
     authorizationParams: {
       audience: process.env.AUTH0_AUDIENCE,
-      //scope: "openid profile email",
     },
   }),
 });
